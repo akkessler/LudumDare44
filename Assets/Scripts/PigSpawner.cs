@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class PigSpawner : MonoBehaviour {
 
+    public static List<PiggyBank> activePigs;
+
     public Transform pigPrefab;
 
+    public int maxPigs = 20;
     public float spawnRate = 5f;
     private float spawnTimer = 0f;
 
@@ -17,9 +20,9 @@ public class PigSpawner : MonoBehaviour {
 
     float planeScalar = 10f; // Unity default plane is 10 units
 
-    // Use this for initialization
     void Start()
     {
+        activePigs = new List<PiggyBank>();
         spawnTimer = 0f;
         width = transform.localScale.x * planeScalar;
         height = transform.localScale.z * planeScalar;
@@ -32,7 +35,10 @@ public class PigSpawner : MonoBehaviour {
         spawnTimer += Time.deltaTime;
         if (spawnTimer > spawnRate)
         {
-            SpawnPig();
+            if (activePigs.Count < maxPigs)
+            {
+                SpawnPig();
+            }
             spawnTimer = 0;
         }
     }
@@ -44,6 +50,13 @@ public class PigSpawner : MonoBehaviour {
         float randomZ = Random.Range(padding - halfHeight, halfHeight - padding);
         Transform spawn = Instantiate(pigPrefab, new Vector3(randomX, pigPrefab.transform.position.y, randomZ), Quaternion.identity);
         PiggyBank pig = spawn.GetComponent<PiggyBank>();
-        Debug.Log(pig.name);
+        pig.value = Random.Range(0f, PlayerController.pig.value * 1.25f);
+        activePigs.Add(pig);
+    }
+
+    public static void Release(PiggyBank forsaken)
+    {
+        activePigs.Remove(forsaken);
+        Destroy(forsaken.gameObject);
     }
 }

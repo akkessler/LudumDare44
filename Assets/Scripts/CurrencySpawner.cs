@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CurrencySpawner : MonoBehaviour {
 
+    public static List<CurrencyPickup> activeCurrency;
+
     public Transform coinPrefab;
     public Transform billPrefab;
     public Currency[] currencyList;
@@ -21,6 +23,7 @@ public class CurrencySpawner : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        activeCurrency = new List<CurrencyPickup>();
         spawnTimer = 0f;
         width = transform.localScale.x * planeScalar;
         height = transform.localScale.z * planeScalar;
@@ -48,5 +51,13 @@ public class CurrencySpawner : MonoBehaviour {
         Transform spawn = Instantiate(currencyPrefab, new Vector3(randomX, currencyPrefab.transform.position.y, randomZ), Quaternion.identity);
         CurrencyPickup pickup = spawn.GetComponent<CurrencyPickup>();
         pickup.currency = currency;
+        activeCurrency.Add(pickup);
+    }
+
+    public static void Release(CurrencyPickup forsaken)
+    {
+        activeCurrency.Remove(forsaken);
+        Destroy(forsaken.gameObject);
+        // TODO Object pooling
     }
 }

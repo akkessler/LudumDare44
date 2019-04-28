@@ -1,35 +1,60 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PiggyBank : MonoBehaviour {
 
     public float value;
+    public float scale;
 
     private Vector3 defaultLocalScale;
+    private const float scaleToValueRatio = 3f / 100f;
+
+    public AudioClip audioClipGrow;
+    public AudioClip audioClipShrink; // TODO Use this for gameover sound?
 
     void Start() {
-        value = 0f;
+        //value = 0f;
         defaultLocalScale = transform.localScale;
+        UpdatePositionAndScale();
+    }
+    void UpdatePositionAndScale()
+    {
+        transform.localScale = defaultLocalScale + (Vector3.one * scale);
+        transform.position = new Vector3(transform.position.x, 4 * transform.localScale.y, transform.position.z);
+    }
+
+    public void AddCurrency(Currency currency)
+    {
+        AddValue(currency.value);
+    }
+
+    public void RemoveValue(float v)
+    {
+        AddValue(-v);
     }
 
     // Check that it is positive?
-    public void AddCurrency(Currency currency)
+    public void AddValue(float v)
     {
-        Debug.Log("Adding currency: " + currency.value);
-        value += currency.value;
-        transform.localScale = defaultLocalScale * LookupScaleBasedOnValue();
+        value = (float) Math.Round(value + v, 2);
+        scale = (float) Math.Round(value * scaleToValueRatio, 2);
+        UpdatePositionAndScale();
     }
-
-    public float LookupScaleBasedOnValue()
+    
+    public void OnCollisionEnter(Collision collision)
     {
-        if (value < 1f) return 1f;
-        if (value < 5f) return 2f;
-        if (value < 10f) return 3f;
-        if (value < 20f) return 4f;
-        if (value < 50f) return 5f;
-        if (value < 100f) return 6f;
-        return 7f;
+        PiggyBank other = collision.collider.GetComponent<PiggyBank>();
+        if(other != null && other.value < value)
+        {
+            if(other.value < value)
+            {
+                if (tag == "Player") Camera.main.GetComponent<AudioSource>().PlayOneShot(audioClipGrow);
+                AddValue(other.value * 0.5f);
+                PigSpawner.Release(other);
+            }
+        }
     }
 
 }

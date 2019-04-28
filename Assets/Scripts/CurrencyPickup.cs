@@ -23,10 +23,14 @@ public class CurrencyPickup : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         PiggyBank pig = other.GetComponent<PiggyBank>();
-        if (pig != null && pig.tag == "Player")
+        if (pig != null)
         {
+            if (pig.tag == "Player")
+            {
+                Camera.main.GetComponent<AudioSource>().PlayOneShot(currency.pickupSound);
+            }
             pig.AddCurrency(currency);
-            Destroy(gameObject); // TODO Use object pool
+            CurrencySpawner.Release(this);
         }
     }
 

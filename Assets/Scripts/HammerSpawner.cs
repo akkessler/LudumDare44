@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HammerSpawner : MonoBehaviour {
 
+
+    public static List<Hammer> activeHammers;
+
     public Transform hammerPrefab;
 
     public float spawnRate = 5f;
@@ -20,6 +23,7 @@ public class HammerSpawner : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        activeHammers = new List<Hammer>();
         spawnTimer = 0f;
         width = transform.localScale.x * planeScalar;
         height = transform.localScale.z * planeScalar;
@@ -43,34 +47,43 @@ public class HammerSpawner : MonoBehaviour {
         float spawnX = 0f;
         float spawnZ = 0f;
         Vector3 dir = Vector3.zero;
+        float eulerY = 0f;
         switch ((Wall) Random.Range(0, 4))
         {
             case Wall.North:
                 spawnX = Random.Range(-halfWidth, halfWidth);
                 spawnZ = halfHeight;
-                dir = Vector3.back;
+                eulerY = Random.Range(120, 240);
                 break;
             case Wall.South:
                 spawnX = Random.Range(-halfWidth, halfWidth);
                 spawnZ = -halfHeight;
-                dir = Vector3.forward;
+                eulerY = Random.Range(-60, 60);
+
                 break;
             case Wall.East:
                 spawnX = halfWidth;
                 spawnZ = Random.Range(-halfHeight, halfHeight);
-                dir = Vector3.left;
+                eulerY = Random.Range(210, 330);
+
                 break;
             case Wall.West:
                 spawnX = -halfWidth;
                 spawnZ = Random.Range(-halfHeight, halfHeight);
-                dir = Vector3.right;
+                eulerY = Random.Range(30, 150);
                 break;
         }
         Vector3 spawnPosition = new Vector3(spawnX, hammerPrefab.transform.position.y, spawnZ);
-        Transform spawn = Instantiate(hammerPrefab, spawnPosition, Quaternion.identity);
+        Transform spawn = Instantiate(hammerPrefab, spawnPosition, Quaternion.Euler(Vector3.up * eulerY));
         Hammer hammer = spawn.GetComponent<Hammer>();
-        hammer.dir = dir;
-        hammer.speed = 5f;
-        Debug.Log(hammer.name);
+        hammer.speed = 10f;
+        hammer.direction = hammer.transform.forward;
+        activeHammers.Add(hammer);
+    }
+
+    public static void Release(Hammer forsaken)
+    {
+        activeHammers.Remove(forsaken);
+        Destroy(forsaken.gameObject);
     }
 }

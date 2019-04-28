@@ -14,3 +14,4 @@ MonoBehaviour:
   value: 0.1
   scale: 0.705
   material: {fileID: 2100000, guid: 9d8e4ac6729a4884da40a61c1cb59cff, type: 2}
+  pickupSound: {fileID: 8300000, guid: 3354ffc17c1df36439d7b76daf942d57, type: 3}
