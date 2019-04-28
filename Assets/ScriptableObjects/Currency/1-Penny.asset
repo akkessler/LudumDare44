@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce40db1da5fa9e346b02e46a5ef959de, type: 3}
+  m_Name: 1-Penny
+  m_EditorClassIdentifier: 
+  value: 0.01
+  scale: 0.75
+  material: {fileID: 2100000, guid: 0f7e7616dc3d710438c51ddb3b139b44, type: 2}

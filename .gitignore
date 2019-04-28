@@ -29,3 +29,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+Assets/Standard Assets
+notes.txt
+
+# Don't commit models until they are less subject to change.
+Assets/Models
