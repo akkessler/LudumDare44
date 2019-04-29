@@ -5,12 +5,15 @@ using System.Linq;
 
 public class PiggyAI : MonoBehaviour {
 
-    public float speed = 5f;
+    private PiggyBank pig;
     
     private CurrencyPickup targetCurrency;
 
     private Transform target;
-    
+    private void Start()
+    {
+        pig = GetComponent<PiggyBank>();
+    }
     void Update()
     {
         if(targetCurrency == null)
@@ -25,7 +28,7 @@ public class PiggyAI : MonoBehaviour {
         {
             transform.rotation = Quaternion.LookRotation(targetRotation);
         }
-        transform.position += transform.forward * speed * Time.deltaTime;
+        transform.position += transform.forward * pig.speed * Time.deltaTime;
     }
     
 }

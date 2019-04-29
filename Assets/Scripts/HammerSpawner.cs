@@ -76,7 +76,6 @@ public class HammerSpawner : MonoBehaviour {
         Vector3 spawnPosition = new Vector3(spawnX, hammerPrefab.transform.position.y, spawnZ);
         Transform spawn = Instantiate(hammerPrefab, spawnPosition, Quaternion.Euler(Vector3.up * eulerY));
         Hammer hammer = spawn.GetComponent<Hammer>();
-        hammer.speed = 10f;
         hammer.direction = hammer.transform.forward;
         activeHammers.Add(hammer);
     }

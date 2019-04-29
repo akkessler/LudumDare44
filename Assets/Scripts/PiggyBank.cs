@@ -7,6 +7,7 @@ public class PiggyBank : MonoBehaviour {
 
     public float value;
     public float scale;
+    public float speed;
 
     private Vector3 defaultLocalScale;
     private const float scaleToValueRatio = 3f / 100f;
@@ -42,7 +43,8 @@ public class PiggyBank : MonoBehaviour {
         scale = (float) Math.Round(value * scaleToValueRatio, 2);
         UpdatePositionAndScale();
     }
-    
+
+    public const float PIG_KILL_CURRENCY_PERCENT = 0.25f;
     public void OnCollisionEnter(Collision collision)
     {
         PiggyBank other = collision.collider.GetComponent<PiggyBank>();
@@ -51,7 +53,7 @@ public class PiggyBank : MonoBehaviour {
             if(other.value < value)
             {
                 if (tag == "Player") Camera.main.GetComponent<AudioSource>().PlayOneShot(audioClipGrow);
-                AddValue(other.value * 0.5f);
+                AddValue(other.value * PIG_KILL_CURRENCY_PERCENT);
                 PigSpawner.Release(other);
             }
         }

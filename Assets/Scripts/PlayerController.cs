@@ -5,9 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public static PiggyBank pig; // access this in a better way?
-
-    public float speed = 1f;
-    public float arriveDistance = 0.25f;
+    private float pigDefaultSpeed;
 
     private bool isMoving;
     private Vector3 targetPosition;
@@ -15,14 +13,52 @@ public class PlayerController : MonoBehaviour {
     private bool isRotating;
     private Quaternion targetRotation;
 
+    private bool isBoosting;
+    public float speedBoostMagnitude;
+    public float speedBoostCooldown;
+    public float speedBoostDuration;
+    private float speedBoostCooldownTimer;
+    private float speedBoostDurationTimer;
+
+
+    void HandleSpeedBoost()
+    {
+        if (isBoosting)
+        {
+            speedBoostDurationTimer -= Time.deltaTime;
+            if (speedBoostDurationTimer <= 0)
+            {
+                isBoosting = false;
+                pig.speed = pigDefaultSpeed;
+            }
+        }
+
+        speedBoostCooldownTimer -= Time.deltaTime;
+        if (speedBoostCooldownTimer <= 0)
+        {
+            speedBoostCooldownTimer = 0;
+            if(Input.GetKeyUp(KeyCode.Space))
+            {
+                isBoosting = true;
+                speedBoostCooldownTimer = speedBoostCooldown;
+                speedBoostDurationTimer = speedBoostDuration;
+                pig.speed = pigDefaultSpeed * speedBoostMagnitude;
+            }
+        }
+    }
+
     private void Start()
     {
         pig = GetComponent<PiggyBank>();
+        pigDefaultSpeed = pig.speed;
+        speedBoostCooldownTimer = 0;
+        speedBoostDurationTimer = 0;
     }
 
     void Update () {
         MoveUsingMousePosition();
         FollowPlayerWithMainCamera();
+        HandleSpeedBoost();
     }
 
     void FollowPlayerWithMainCamera()
@@ -48,7 +84,8 @@ public class PlayerController : MonoBehaviour {
         }
 
         // null checks?
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, pig.speed * Time.deltaTime);
         transform.rotation = targetRotation;
     }
+
 }
