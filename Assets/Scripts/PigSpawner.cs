@@ -46,18 +46,27 @@ public class PigSpawner : MonoBehaviour {
     public void SpawnPig()
     {
         float padding = planeScalar; // prevents currency from spawning inside of walls
+        // FIXME could make this simpler by moving plane to be in +xz quadrant.
         float randomX = Random.Range(padding - halfWidth, halfWidth - padding);
         float randomZ = Random.Range(padding - halfHeight, halfHeight - padding);
         Transform spawn = Instantiate(pigPrefab, new Vector3(randomX, pigPrefab.transform.position.y, randomZ), Quaternion.identity);
         PiggyBank pig = spawn.GetComponent<PiggyBank>();
-        // 0.95f since don't want to spawn pigs that can auto kill player (need check to prevent spawning on top of player)
-        pig.value = Random.Range(0f, PlayerController.pig.value * .95f); 
+        // 0.8f since don't want to spawn pigs that can auto kill player (need check to prevent spawning on top of player)
+        pig.value = Random.Range(0f, PlayerController.pig.value * .8f); 
         activePigs.Add(pig);
     }
 
     public static void Release(PiggyBank forsaken)
     {
-        activePigs.Remove(forsaken);
+        if (forsaken.tag == "Player")
+        {
+            Camera.main.GetComponent<AudioSource>().PlayOneShot(forsaken.audioClipShrink);
+            GameManager.Instance.LoseGame(forsaken.value);
+        }
+        else
+        {
+            activePigs.Remove(forsaken);
+        }
         Destroy(forsaken.gameObject);
     }
 }

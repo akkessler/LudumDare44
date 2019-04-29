@@ -48,7 +48,7 @@ public class PiggyBank : MonoBehaviour {
     public void OnCollisionEnter(Collision collision)
     {
         PiggyBank other = collision.collider.GetComponent<PiggyBank>();
-        if(other != null && other.value < value)
+        if(other != null)
         {
             if(other.value < value)
             {
