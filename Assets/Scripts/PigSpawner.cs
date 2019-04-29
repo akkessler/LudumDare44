@@ -50,7 +50,8 @@ public class PigSpawner : MonoBehaviour {
         float randomZ = Random.Range(padding - halfHeight, halfHeight - padding);
         Transform spawn = Instantiate(pigPrefab, new Vector3(randomX, pigPrefab.transform.position.y, randomZ), Quaternion.identity);
         PiggyBank pig = spawn.GetComponent<PiggyBank>();
-        pig.value = Random.Range(0f, PlayerController.pig.value * 1.25f);
+        // 0.95f since don't want to spawn pigs that can auto kill player (need check to prevent spawning on top of player)
+        pig.value = Random.Range(0f, PlayerController.pig.value * .95f); 
         activePigs.Add(pig);
     }
 

@@ -33,5 +33,7 @@ sysinfo.txt
 Assets/Standard Assets
 notes.txt
 
-# Don't commit models until they are less subject to change.
-Assets/Models
+Assets/TextMesh Pro*
+Logs/
+
+.vs*
