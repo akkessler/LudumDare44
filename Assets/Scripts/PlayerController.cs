@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour {
         // Consider smoothing with lerp or something.
         Camera.main.transform.position = new Vector3(
             transform.position.x,
-            50f + ((transform.localScale.y - 0.5f) * (50f / 3f)), //Camera.main.transform.position.y,
+            70f + ((transform.localScale.y - 0.5f) * (50f / 3f)), //Camera.main.transform.position.y,
             transform.position.z
         );
     }
