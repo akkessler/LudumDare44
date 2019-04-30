@@ -10,19 +10,29 @@ public class PiggyAI : MonoBehaviour {
     private CurrencyPickup targetCurrency;
 
     private Transform target;
+
     private void Start()
     {
         pig = GetComponent<PiggyBank>();
     }
+
     void Update()
     {
         if(targetCurrency == null)
         {
-            targetCurrency = CurrencySpawner.activeCurrency.OrderBy(x => (x.transform.position - transform.position).sqrMagnitude).First();
-            // Another check to see if target currency actually found?
+            if(CurrencySpawner.activeCurrency.Count > 0)
+            {
+                targetCurrency = CurrencySpawner.activeCurrency.OrderBy(x => (x.transform.position - transform.position).sqrMagnitude).First();
+            }
         }
-        target = targetCurrency.transform;
-        Vector3 targetPosition = new Vector3(target.position.x, transform.position.y, target.position.z);
+
+        Vector3 targetPosition = transform.position;
+        if(targetCurrency != null)
+        {
+            target = targetCurrency.transform;
+            targetPosition = new Vector3(target.position.x, transform.position.y, target.position.z);
+        }
+
         Vector3 targetRotation = targetPosition - transform.position;
         if(targetRotation != Vector3.zero)
         {

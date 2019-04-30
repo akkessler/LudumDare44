@@ -28,6 +28,10 @@ public class PigSpawner : MonoBehaviour {
         height = transform.localScale.z * planeScalar;
         halfWidth = width / 2;
         halfHeight = height / 2;
+
+
+        // THIS IS FOR THE MAIN MENU (SHOULD REALLY GO SOMEWHERE ELSE)
+        SpawnPig(); SpawnPig(); SpawnPig();
     }
 
     void Update()
@@ -52,7 +56,8 @@ public class PigSpawner : MonoBehaviour {
         Transform spawn = Instantiate(pigPrefab, new Vector3(randomX, pigPrefab.transform.position.y, randomZ), Quaternion.identity);
         PiggyBank pig = spawn.GetComponent<PiggyBank>();
         // 0.8f since don't want to spawn pigs that can auto kill player (need check to prevent spawning on top of player)
-        pig.value = Random.Range(0f, PlayerController.pig.value * .8f); 
+        float maxValue = PlayerController.pig != null ? PlayerController.pig.value * .8f : 10f;
+        pig.value = Random.Range(0f, maxValue); 
         activePigs.Add(pig);
     }
 

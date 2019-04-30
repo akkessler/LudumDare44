@@ -20,6 +20,7 @@ public class CurrencyPickup : MonoBehaviour {
         if(currency.value < 1)
         {
             int cents = (int) (currency.value * 100);
+            if (cents == 0) cents = 1; // seems to be a floating point issue with pennys on .01 * 100
             tmp.SetText(cents.ToString());
         }
         else

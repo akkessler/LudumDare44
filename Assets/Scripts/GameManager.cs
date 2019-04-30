@@ -19,24 +19,45 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         gameOverOverlay.gameObject.SetActive(false);
+        StartMainMenu();
+    }
+
+    public void StartMainMenu()
+    {
+        menuOverlay.gameObject.SetActive(true);
+        menuCamera.enabled = true;
+        playerCamera.enabled = false;
+    }
+
+    public void StartGame()
+    {
+        menuOverlay.gameObject.SetActive(false);
+        ClearArena();
+        Instantiate(playerPrefab);
+        menuCamera.enabled = false;
+        playerCamera.enabled = true;
     }
 
     public void RestartGame()
     {
-        Debug.Log("Restart");
         gameOverOverlay.gameObject.SetActive(false);
+        ClearArena();
+        Instantiate(playerPrefab);
+    }
+
+    public void LoseGame(float value)
+    {
+        gameOverOverlay.gameObject.SetActive(true);
+    }
+
+    public void ClearArena()
+    {
         PigSpawner.activePigs.ForEach(p => Destroy(p.gameObject));
         HammerSpawner.activeHammers.ForEach(h => Destroy(h.gameObject));
         CurrencySpawner.activeCurrency.ForEach(c => Destroy(c.gameObject));
         PigSpawner.activePigs.Clear();
         HammerSpawner.activeHammers.Clear();
         CurrencySpawner.activeCurrency.Clear();
-        Instantiate(playerPrefab);
     }
 
-    public void LoseGame(float value)
-    {
-        Debug.Log("Lose Game");
-        gameOverOverlay.gameObject.SetActive(true);
-    }
 }
